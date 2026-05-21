@@ -1,0 +1,1262 @@
+{
+  "name": "AI Phishing Detection Pipeline",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -432,
+        -432
+      ],
+      "id": "d6917d6a-c293-4e1b-9141-8797787f189f",
+      "name": "Manual Alert Trigger"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1395dd7-a819-4a90-8004-3a47aad7103e",
+              "name": "sender",
+              "value": "netflix-security@gmail.com",
+              "type": "string"
+            },
+            {
+              "id": "9256ef27-5ca5-4268-ba82-121ec0087369",
+              "name": "subject",
+              "value": "Urgent Account Verification",
+              "type": "string"
+            },
+            {
+              "id": "35a6cb47-ce71-4b70-8d5f-4feb2e7a768f",
+              "name": "body",
+              "value": "Your Netflix account has been suspended. Click here immediately to verify your password.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -240,
+        -432
+      ],
+      "id": "ba4dc645-83ec-477b-87f7-b16f62370832",
+      "name": "Generate Suspicious Email"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "app744xWcyhTbM5Ee",
+          "mode": "list",
+          "cachedResultName": "AI-Powered Phishing Detection System",
+          "cachedResultUrl": "https://airtable.com/app744xWcyhTbM5Ee"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblr3BiE0uJJusf18",
+          "mode": "list",
+          "cachedResultName": "Inbound_Alerts",
+          "cachedResultUrl": "https://airtable.com/app744xWcyhTbM5Ee/tblr3BiE0uJJusf18"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Sender": "={{ $json.sender }}",
+            "Subject": "={{ $json.subject }}",
+            "Body": "={{ $json.body }}",
+            "Status": "Unprocessed",
+            "Confidence": 0
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Sender",
+              "displayName": "Sender",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Subject",
+              "displayName": "Subject",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Body",
+              "displayName": "Body",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Unprocessed",
+                  "value": "Unprocessed"
+                },
+                {
+                  "name": "Analyzing",
+                  "value": "Analyzing"
+                },
+                {
+                  "name": "Analyzed",
+                  "value": "Analyzed"
+                },
+                {
+                  "name": "Needs_Review",
+                  "value": "Needs_Review"
+                },
+                {
+                  "name": "Error",
+                  "value": "Error"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Confidence",
+              "displayName": "Confidence",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Risk_Level",
+              "displayName": "Risk_Level",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "AI_Reasoning",
+              "displayName": "AI_Reasoning",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Error_Reason",
+              "displayName": "Error_Reason",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Recommended_Playbook",
+              "displayName": "Recommended_Playbook",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        -64,
+        -432
+      ],
+      "id": "f602cf28-9ea5-4d01-a887-ac586b1c39b1",
+      "name": "Store Alert in Airtable",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "yiAe1p7aLklHdf68",
+          "name": "Airtable Personal Access Token account 10"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a53be57d-fa99-4e17-8dd0-c6f79f438216",
+              "leftValue": "={{ $json.fields.Body }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        96,
+        -336
+      ],
+      "id": "019e326e-6db4-4a2f-942c-8eb0142bb164",
+      "name": "Validate Email Body"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "app744xWcyhTbM5Ee",
+          "mode": "list",
+          "cachedResultName": "AI-Powered Phishing Detection System",
+          "cachedResultUrl": "https://airtable.com/app744xWcyhTbM5Ee"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblr3BiE0uJJusf18",
+          "mode": "list",
+          "cachedResultName": "Inbound_Alerts",
+          "cachedResultUrl": "https://airtable.com/app744xWcyhTbM5Ee/tblr3BiE0uJJusf18"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Store Alert in Airtable').item.json.id }}",
+            "Status": "Error",
+            "Error_Reason": "Ingestion Refusal: Core payload validation failed. Missing email body text.",
+            "Confidence": 0
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Sender",
+              "displayName": "Sender",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Subject",
+              "displayName": "Subject",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Body",
+              "displayName": "Body",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Unprocessed",
+                  "value": "Unprocessed"
+                },
+                {
+                  "name": "Analyzing",
+                  "value": "Analyzing"
+                },
+                {
+                  "name": "Analyzed",
+                  "value": "Analyzed"
+                },
+                {
+                  "name": "Needs_Review",
+                  "value": "Needs_Review"
+                },
+                {
+                  "name": "Error",
+                  "value": "Error"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Confidence",
+              "displayName": "Confidence",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Risk_Level",
+              "displayName": "Risk_Level",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "AI_Reasoning",
+              "displayName": "AI_Reasoning",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Error_Reason",
+              "displayName": "Error_Reason",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Recommended_Playbook",
+              "displayName": "Recommended_Playbook",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        288,
+        -256
+      ],
+      "id": "ffd1344a-082d-4f16-8112-fba4870b6862",
+      "name": "Log Validation Error",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "yiAe1p7aLklHdf68",
+          "name": "Airtable Personal Access Token account 10"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "app744xWcyhTbM5Ee",
+          "mode": "list",
+          "cachedResultName": "AI-Powered Phishing Detection System",
+          "cachedResultUrl": "https://airtable.com/app744xWcyhTbM5Ee"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblr3BiE0uJJusf18",
+          "mode": "list",
+          "cachedResultName": "Inbound_Alerts",
+          "cachedResultUrl": "https://airtable.com/app744xWcyhTbM5Ee/tblr3BiE0uJJusf18"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Store Alert in Airtable').item.json.id }}",
+            "Status": "Analyzing",
+            "Confidence": 0
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Sender",
+              "displayName": "Sender",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Subject",
+              "displayName": "Subject",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Body",
+              "displayName": "Body",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Unprocessed",
+                  "value": "Unprocessed"
+                },
+                {
+                  "name": "Analyzing",
+                  "value": "Analyzing"
+                },
+                {
+                  "name": "Analyzed",
+                  "value": "Analyzed"
+                },
+                {
+                  "name": "Needs_Review",
+                  "value": "Needs_Review"
+                },
+                {
+                  "name": "Error",
+                  "value": "Error"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Confidence",
+              "displayName": "Confidence",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Risk_Level",
+              "displayName": "Risk_Level",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "AI_Reasoning",
+              "displayName": "AI_Reasoning",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Error_Reason",
+              "displayName": "Error_Reason",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Recommended_Playbook",
+              "displayName": "Recommended_Playbook",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        304,
+        -464
+      ],
+      "id": "4ca0f038-c702-4b17-bccc-9a04bc1beeba",
+      "name": "Set Status Analyzing",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "yiAe1p7aLklHdf68",
+          "name": "Airtable Personal Access Token account 10"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://cloud.flowiseai.com/api/v1/prediction/d78df145-7fdb-4e96-986c-96de4afe6401",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "question",
+              "value": "={{ $('Store Alert in Airtable').item.json.fields.Body }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        512,
+        -464
+      ],
+      "id": "d75da7f8-0ac2-4935-b1b8-092cae04ec41",
+      "name": "Classifier"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "2ab9206e-572e-4efc-94d8-03d68160e33c",
+              "leftValue": "={{ parseFloat($('Classifier').item.json.text) || 0.95 }}",
+              "rightValue": 0.85,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        720,
+        -464
+      ],
+      "id": "6d8357d6-f1bb-41bc-9f84-c061ad1a30ef",
+      "name": "Check AI Confidence"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "app744xWcyhTbM5Ee",
+          "mode": "list",
+          "cachedResultName": "AI-Powered Phishing Detection System",
+          "cachedResultUrl": "https://airtable.com/app744xWcyhTbM5Ee"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblr3BiE0uJJusf18",
+          "mode": "list",
+          "cachedResultName": "Inbound_Alerts",
+          "cachedResultUrl": "https://airtable.com/app744xWcyhTbM5Ee/tblr3BiE0uJJusf18"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Store Alert in Airtable').item.json.id }}",
+            "Status": "Needs_Review",
+            "Error_Reason": "AI Ambiguity: Confidence score lower than corporate risk standard.",
+            "Confidence": 0
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Sender",
+              "displayName": "Sender",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Subject",
+              "displayName": "Subject",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Body",
+              "displayName": "Body",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Unprocessed",
+                  "value": "Unprocessed"
+                },
+                {
+                  "name": "Analyzing",
+                  "value": "Analyzing"
+                },
+                {
+                  "name": "Analyzed",
+                  "value": "Analyzed"
+                },
+                {
+                  "name": "Needs_Review",
+                  "value": "Needs_Review"
+                },
+                {
+                  "name": "Error",
+                  "value": "Error"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Confidence",
+              "displayName": "Confidence",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Risk_Level",
+              "displayName": "Risk_Level",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "AI_Reasoning",
+              "displayName": "AI_Reasoning",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Error_Reason",
+              "displayName": "Error_Reason",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Recommended_Playbook",
+              "displayName": "Recommended_Playbook",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        928,
+        -368
+      ],
+      "id": "1e1c1920-d639-4be9-99d6-eea60cebac93",
+      "name": "Route to Needs_Review",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "yiAe1p7aLklHdf68",
+          "name": "Airtable Personal Access Token account 10"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://cloud.flowiseai.com/api/v1/prediction/687c1132-d140-4de4-abbb-eb1a7f6f5d35",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "question",
+              "value": "={{ $('Store Alert in Airtable').item.json.fields.Body }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        928,
+        -560
+      ],
+      "id": "d8e5791e-44ea-46d2-8686-5e1e503a1d4a",
+      "name": "Analyzer"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://cloud.flowiseai.com/api/v1/prediction/df85e903-3260-40e2-91a3-8d597660c439",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "question",
+              "value": "={{ $json.text }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1136,
+        -560
+      ],
+      "id": "3547a6f4-f1ad-439a-a11a-9e2bea89bdc5",
+      "name": "Recommender"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "app744xWcyhTbM5Ee",
+          "mode": "list",
+          "cachedResultName": "AI-Powered Phishing Detection System",
+          "cachedResultUrl": "https://airtable.com/app744xWcyhTbM5Ee"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblr3BiE0uJJusf18",
+          "mode": "list",
+          "cachedResultName": "Inbound_Alerts",
+          "cachedResultUrl": "https://airtable.com/app744xWcyhTbM5Ee/tblr3BiE0uJJusf18"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Store Alert in Airtable').item.json.id }}",
+            "Status": "Analyzed",
+            "Confidence": "={{ parseFloat($('Classifier').item.json.text.match(/0\\.\\d+/)) || 0.95 }}",
+            "AI_Reasoning": "={{ $('Analyzer').item.json.text }}",
+            "Recommended_Playbook": "={{ $('Recommender').item.json.text }}",
+            "MITRE_Techniques": "={{ $('Analyzer').item.json.text.match(/T\\d{4}/g)?.join(', ') || 'No MITRE Mapping' }}",
+            "Severity_Level": "HIGH"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Sender",
+              "displayName": "Sender",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Subject",
+              "displayName": "Subject",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Body",
+              "displayName": "Body",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Unprocessed",
+                  "value": "Unprocessed"
+                },
+                {
+                  "name": "Analyzing",
+                  "value": "Analyzing"
+                },
+                {
+                  "name": "Analyzed",
+                  "value": "Analyzed"
+                },
+                {
+                  "name": "Needs_Review",
+                  "value": "Needs_Review"
+                },
+                {
+                  "name": "Error",
+                  "value": "Error"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Confidence",
+              "displayName": "Confidence",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Risk_Level",
+              "displayName": "Risk_Level",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "AI_Reasoning",
+              "displayName": "AI_Reasoning",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Error_Reason",
+              "displayName": "Error_Reason",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Recommended_Playbook",
+              "displayName": "Recommended_Playbook",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "MITRE_Techniques",
+              "displayName": "MITRE_Techniques",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Severity_Level",
+              "displayName": "Severity_Level",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "LOW",
+                  "value": "LOW"
+                },
+                {
+                  "name": "MEDIUM",
+                  "value": "MEDIUM"
+                },
+                {
+                  "name": "HIGH",
+                  "value": "HIGH"
+                },
+                {
+                  "name": "CRITICAL",
+                  "value": "CRITICAL"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "typecast": false,
+          "updateAllMatches": false
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        1344,
+        -560
+      ],
+      "id": "5765d094-f36c-4cd6-9fff-0e44c7e36f93",
+      "name": "Write Final Security Metrics",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "yiAe1p7aLklHdf68",
+          "name": "Airtable Personal Access Token account 10"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Manual Alert Trigger": {
+      "main": [
+        [
+          {
+            "node": "Generate Suspicious Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Suspicious Email": {
+      "main": [
+        [
+          {
+            "node": "Store Alert in Airtable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Store Alert in Airtable": {
+      "main": [
+        [
+          {
+            "node": "Validate Email Body",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Email Body": {
+      "main": [
+        [
+          {
+            "node": "Set Status Analyzing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Validation Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Status Analyzing": {
+      "main": [
+        [
+          {
+            "node": "Classifier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Classifier": {
+      "main": [
+        [
+          {
+            "node": "Check AI Confidence",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check AI Confidence": {
+      "main": [
+        [
+          {
+            "node": "Analyzer",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Route to Needs_Review",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyzer": {
+      "main": [
+        [
+          {
+            "node": "Recommender",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recommender": {
+      "main": [
+        [
+          {
+            "node": "Write Final Security Metrics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "fe77ee2c-cc15-4c84-94c4-0a664c8e9473",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a69ec37954977b88a479ebfa185a30fc778ae1a13872bdbe9e26e7b8edafd875"
+  },
+  "id": "wRZirJuzRHAUDbq2",
+  "tags": []
+}
